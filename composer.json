@@ -1,12 +1,13 @@
 {
-  "name": "georgringer/belayout-fileprovider",
+  "name": "frontal/belayout-fileprovider",
   "type": "typo3-cms-extension",
+  "version": "0.0.3",
   "description": "A File provider for Backend Layouts",
   "homepage": "https://github.com/georgringer/belayout_fileprovider",
   "license": ["GPL-2.0+"],
   "keywords": ["TYPO3 CMS"],
   "require": {
-    "typo3/cms-core": ">=6.2.0,<8.0"
+    "typo3/cms": ">=6.2.0,<8.9.99"
   },
   "autoload": {
     "psr-4": {

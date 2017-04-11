@@ -25,8 +25,27 @@ class FileProvider implements DataProviderInterface {
 	 */
 	public function addBackendLayouts(DataProviderContext $dataProviderContext, BackendLayoutCollection $backendLayoutCollection) {
 		$files = $this->getLayoutFiles();
+        
+        // START FIX FRONTAL
+        // hide special backend_layout for non redactors 
+        // settings in PageTS => TCEFORM.pagesbackend_layout.removeItemsForNonAdmin
+        $pageTsConfig = $dataProviderContext->getPageTsConfig();
+        $itemsToRemoveForNonAdmin = array();
+        if(trim($pageTsConfig['TCEFORM.']['pages.']['backend_layout.']['removeItemsForNonAdmin'])) {
+            $itemsToRemoveForNonAdmin = array_map('trim', explode(',',trim($pageTsConfig['TCEFORM.']['pages.']['backend_layout.']['removeItemsForNonAdmin'])));
+        }
+        // END FIX FRONTAL
+        
 		foreach ($files as $file) {
 			$backendLayout = $this->createBackendLayout($file);
+
+            // START FIX FRONTAL
+            if(!$GLOBALS['BE_USER']->isAdmin() && in_array($backendLayout->getIdentifier(), $itemsToRemoveForNonAdmin)) 
+            { 
+                continue; 
+            }
+            // END FIX FRONTAL
+            
 			$backendLayoutCollection->add($backendLayout);
 		}
 	}
